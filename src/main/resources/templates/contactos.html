@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#searchInput').on('keyup', function () {
+                    var value = $(this).val().toLowerCase();
+                    $('.contactoRow').filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+
+    </head>
+    <body>
+        <div th:include="plantilla/plantilla_admin.html::header">
+
+        </div>
+        <div class="container"> 
+
+
+            <h2 th:text="Contactos"></h2>
+            <hr>
+            <div>
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                    Agregar Contacto
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Nuevo Contacto</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form th:action="@{/Contacto/guardar}" class="was-validated" method="post">
+                                    <div class="form-group">
+                                        <label for="uname">Nombre:</label>
+                                        <input type="text" class="form-control" id="uname" placeholder="Ingrese nombre" name="nombre" required>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ape">Apellido:</label>
+                                        <input type="text" class="form-control" id="ape" placeholder="Ingrese apellido" name="apellido" required>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email:</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Ingrese email" name="email" required>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tel">Telefono:</label>
+                                        <input type="tel" class="form-control" id="tel" placeholder="Ingrese telefono" name="telefono" required>
+                                        <div class="valid-feedback">Valid.</div>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" th:text="Guardar"></button>
+                                </form>
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <hr>
+            <input id="searchInput" type="text" placeholder="Buscar..."> 
+            <hr>
+            <table class="table table-hover">
+
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apllido</th>
+                        <th>Email</th>
+                        <th>Telefono</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr class="contactoRow" th:each="contacto : ${listaContactos}">
+                        <td th:text="${contacto.id}"></td>
+                        <td th:text="${contacto.nombre}"></td>
+                        <td th:text="${contacto.apellido}"> </td>
+                        <td th:text="${contacto.email}"></td>
+                        <td th:text="${contacto.telefono}"></td>
+                        <td th:text="${contacto.usuario.id}" hidden="true"></td>
+                        <td><a class="btn btn-warning btn-sm" th:text="Editar" th:href="@{/Contacto/editar/} + ${contacto.id}"></a></td>
+                        <td><a class="btn btn-danger btn-sm" th:text="Eliminar" th:href="@{/Contacto/eliminar/} + ${contacto.id}"></a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+
+        <div th:include="plantilla/plantilla_admin.html::footer">
+
+        </div>
+    </body>
+</html>
